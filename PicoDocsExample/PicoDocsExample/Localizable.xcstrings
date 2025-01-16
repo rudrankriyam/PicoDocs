@@ -1,0 +1,87 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "%@" : {
+
+    },
+    "%lld" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Children:" : {
+
+    },
+    "Date created:" : {
+
+    },
+    "Date last modified:" : {
+
+    },
+    "Download a file from the web" : {
+
+    },
+    "Download failed: %@" : {
+
+    },
+    "Downloaded" : {
+
+    },
+    "Downloading in progress (%lf)" : {
+
+    },
+    "Drop documents or directories here" : {
+
+    },
+    "Enter URL of any HTML, PDF, Word, Excel, or ePub file on the web" : {
+
+    },
+    "Enter Web URL..." : {
+
+    },
+    "File metadata" : {
+
+    },
+    "Filename:" : {
+
+    },
+    "Kind:" : {
+
+    },
+    "Not started" : {
+
+    },
+    "OK" : {
+
+    },
+    "Open File..." : {
+
+    },
+    "Original Content" : {
+
+    },
+    "Original location" : {
+
+    },
+    "Output format" : {
+
+    },
+    "Parsed" : {
+
+    },
+    "Select File From Disk..." : {
+
+    },
+    "Size:" : {
+
+    },
+    "Status:" : {
+
+    }
+  },
+  "version" : "1.0"
+}

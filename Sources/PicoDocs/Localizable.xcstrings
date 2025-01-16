@@ -1,0 +1,33 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Bookmark is stale. User needs to allow access to file(s) again" : {
+
+    },
+    "Document has no content" : {
+
+    },
+    "Document type not supported" : {
+
+    },
+    "Error parsing document" : {
+
+    },
+    "File is corrupted" : {
+
+    },
+    "Invalid URL" : {
+
+    },
+    "No access to File" : {
+
+    },
+    "The document is empty" : {
+
+    },
+    "The file cannot be exported to requested format" : {
+
+    }
+  },
+  "version" : "1.0"
+}
