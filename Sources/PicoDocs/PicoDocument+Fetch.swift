@@ -33,7 +33,8 @@ extension PicoDocument {
                     }
                 }
             }
-            await updateData(data, utType: utType)
+            // TODO: update fetch to return multiple data?
+            await updateData( data == nil ? nil : [data!], utType: utType)
         } catch {
             print("Error fetching: \(error.localizedDescription)")
             await setError(error)
@@ -84,14 +85,20 @@ extension PicoDocument {
     /// - Parameters:
     ///   - data: The raw data content of the document
     ///   - utType: The uniform type identifier of the document
-    private func updateData(_ data: Data?, utType: UTType? = nil) {
+    private func updateData(_ data: [Data]?, utType: UTType? = nil) {
         self.dateLastFetched = Date()
         self.originalContent = data
+        
+        /*
+         why do we set original content again?
         if let data, let content = String(data: data, encoding: .utf8) {
+            self.originalContent = data
             self.exportedContent = [content]
         } else {
+            self.originalContent = nil
             self.exportedContent = nil
         }
+         */
         self.status = .downloaded
         if let utType {
             // Some web URLs may not include a file extension. The file type can only be determined from the MIME type during the fetch phase.

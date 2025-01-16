@@ -13,7 +13,7 @@ import PDFKit
 struct DocumentParser {
     
     /// Create appropriate parser for the given UTType
-    static func parser(for content: Data, url: URL) throws -> DocumentParserProtocol {
+    static func parser(for content: [Data], url: URL) throws -> DocumentParserProtocol {
         
         guard let utType = UTType(filenameExtension: url.pathExtension), utType.isSupported else {
             if !url.isFileURL {
@@ -27,8 +27,7 @@ struct DocumentParser {
         
         if utType.conforms(to: .epub) {
             
-            // TODO: Add support for ePub
-            throw PicoDocsError.documentTypeNotSupported
+            return EPUBParser(url: url)
             
 //        } else if utType.conforms(to: .xls) {
 //            
@@ -36,9 +35,13 @@ struct DocumentParser {
             
         } else if utType.conforms(to: .xlsx) || utType.conforms(to: .spreadsheet) {
             
-            return ExcelParser(content: content)
+            guard let content = content.first else { throw PicoDocsError.noContent }
+                            
+            return try ExcelParser(content: content)
             
         } else if utType.conforms(to: .pdf) {
+            
+            guard let content = content.first else { throw PicoDocsError.noContent }
             
             guard let pdfDocument = PDFDocument(data: content) else {
                 throw PicoDocsError.parsingError
@@ -47,6 +50,8 @@ struct DocumentParser {
             
         } else if utType.conforms(to: .rtf) {
             
+            guard let content = content.first else { throw PicoDocsError.noContent }
+            
             let attributedString = try NSAttributedString(data: content, options: [
                 .documentType: NSAttributedString.DocumentType.rtf,
                 .characterEncoding: String.Encoding.utf8.rawValue
@@ -54,6 +59,8 @@ struct DocumentParser {
             return AttributedStringParser(content: attributedString)
             
         } else if utType.conforms(to: .rtfd) {
+            
+            guard let content = content.first else { throw PicoDocsError.noContent }
             
             let attributedString = try NSAttributedString(data: content, options: [
                 .documentType: NSAttributedString.DocumentType.rtfd,
@@ -66,6 +73,8 @@ struct DocumentParser {
 #if os(iOS)
             throw PicoDocsError.documentTypeNotSupported
 #else
+            guard let content = content.first else { throw PicoDocsError.noContent }
+            
             let attributedString = try NSAttributedString(data: content, options: [
                 .documentType: NSAttributedString.DocumentType.docFormat,
                 .characterEncoding: String.Encoding.utf8.rawValue
@@ -78,6 +87,8 @@ struct DocumentParser {
 #if os(iOS)
             throw PicoDocsError.documentTypeNotSupported
 #else
+            guard let content = content.first else { throw PicoDocsError.noContent }
+            
             let attributedString = try NSAttributedString(data: content, options: [
                 .documentType: NSAttributedString.DocumentType.wordML,
                 .characterEncoding: String.Encoding.utf8.rawValue
@@ -86,6 +97,8 @@ struct DocumentParser {
 #endif
             
         } else if utType.conforms(to: .text) || utType.conforms(to: .flatRTFD) || utType.conforms(to: .plainText) || utType.conforms(to: .utf8PlainText) || utType.conforms(to: .xml) || utType.conforms(to: .swiftSource) || utType.conforms(to: .cSource) || utType.conforms(to: .cPlusPlusSource) || utType.conforms(to: .pythonScript) || utType.conforms(to: .javaScript) {
+            
+            guard let content = content.first else { throw PicoDocsError.noContent }
             
             guard let text = String(data: content, encoding: .utf8) else {
                 throw PicoDocsError.documentTypeNotSupported
@@ -98,6 +111,9 @@ struct DocumentParser {
             #if os(iOS)
             throw PicoDocsError.documentTypeNotSupported
             #else
+            
+            guard let content = content.first else { throw PicoDocsError.noContent }
+            
             let attributedString = try NSAttributedString(data: content, options: [
                 .documentType: NSAttributedString.DocumentType.webArchive,
                 .characterEncoding: String.Encoding.utf8.rawValue

@@ -55,11 +55,9 @@ open class FileFetcher: FetcherProtocol {
             
         } else if let utType = UTType(filenameExtension: url.pathExtension), utType == .epub {
             
-            #if os(macOS)
-            return try handleEpubMacOS()
-            #else
-            return try handleEpubiOS()
-            #endif
+            // ePub
+            
+            return try handleEpub()
             
         } else {
             
@@ -72,7 +70,7 @@ open class FileFetcher: FetcherProtocol {
     }
     
     #if os(macOS)
-    private func handleEpubMacOS() throws -> (Data?, UTType?, [URL]?) {
+    private func handleEpub() throws -> (Data?, UTType?, [URL]?) {
         let fileManager = FileManager.default
         let tmpURL = URL.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try fileManager.createDirectory(at: tmpURL, withIntermediateDirectories: true)
@@ -124,7 +122,7 @@ open class FileFetcher: FetcherProtocol {
         return (nil, nil, orderedFiles)
     }
     #else
-    private func handleEpubiOS() throws -> (Data?, UTType?, [URL]?) {
+    private func handleEpub() throws -> (Data?, UTType?, [URL]?) {
         let fileManager = FileManager.default
         let tmpURL = URL.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try fileManager.createDirectory(at: tmpURL, withIntermediateDirectories: true)
