@@ -70,7 +70,7 @@ extension PicoDocument {
             let parsedDocument = try await parser.parseDocument(to: type)
             Task { @MainActor in
                 // Consolidate parsed content into a single string with double newlines between worksheets
-                self.exportedContent = parsedDocument.content.joined(separator: "\n\n")
+                self.exportedContent = parsedDocument.content
                 self.status = .parsed
             }
         } catch {
@@ -87,7 +87,11 @@ extension PicoDocument {
     private func updateData(_ data: Data?, utType: UTType? = nil) {
         self.dateLastFetched = Date()
         self.originalContent = data
-        self.exportedContent = String(data: data ?? Data(), encoding: .utf8) ?? nil
+        if let data, let content = String(data: data, encoding: .utf8) {
+            self.exportedContent = [content]
+        } else {
+            self.exportedContent = nil
+        }
         self.status = .downloaded
         if let utType {
             // Some web URLs may not include a file extension. The file type can only be determined from the MIME type during the fetch phase.

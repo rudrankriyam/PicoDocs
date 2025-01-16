@@ -56,7 +56,7 @@ public class PicoDocument {
     public var originalContent: Data?
 
     /// Content converted to a format suitable for LLM processing
-    public var exportedContent: String?
+    public var exportedContent: [String]?
 
     /// Title of the document
     public var title: String?

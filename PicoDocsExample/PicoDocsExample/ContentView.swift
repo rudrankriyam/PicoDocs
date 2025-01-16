@@ -23,11 +23,11 @@ struct ContentView: View {
                 TabView {
                     ForEach(children, id: \.self) { child in
                         Tab("\(child.title ?? child.filename)", systemImage: "document") {
-                            ScrollView {                                
+                            ScrollView {
                                 if outputFormat == nil, let data = child.originalContent, let original = String(data: data, encoding: .utf8) {
                                     Text(original)
                                 } else {
-                                    Text(child.exportedContent ?? "")
+                                    Text(child.exportedContent?.joined(separator: "\n\n------\n\n") ?? "")
                                 }
                             }
                             MetadataView(document: child)
@@ -43,7 +43,7 @@ struct ContentView: View {
                     if outputFormat == nil, let data = document?.originalContent, let original = String(data: data, encoding: .utf8) {
                         Text(original)
                     } else {
-                        Text(document?.exportedContent ?? "")
+                        Text(document?.exportedContent?.joined(separator: "\n\n------\n\n") ?? "")
                     }
                 }
                 .textSelection(.enabled)
