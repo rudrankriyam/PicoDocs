@@ -27,7 +27,8 @@ struct AttributedStringParser: DocumentParserProtocol {
         case .html:
             return try await ParsedDocument(
                 title: nil,
-                needsChunking: true,
+                author: nil,
+                cover: nil,
                 content: [content.toHTML()]
             )
         case .xml:
@@ -35,13 +36,15 @@ struct AttributedStringParser: DocumentParserProtocol {
         case .markdown:
             return ParsedDocument(
                 title: nil,
-                needsChunking: true,
+                author: nil,
+                cover: nil,
                 content: [content.toMarkdown()]
             )
         case .plaintext:
             return ParsedDocument(
                 title: nil,
-                needsChunking: false,
+                author: nil,
+                cover: nil,
                 content: [content.string]
             )
         case .csv:

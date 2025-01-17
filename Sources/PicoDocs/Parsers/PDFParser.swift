@@ -55,7 +55,8 @@ public struct PDFParser: DocumentParserProtocol {
         
         let parsed = ParsedDocument(
             title: title,
-            needsChunking: true,
+            author: nil,
+            cover: nil,
             content: [content]
         )
         return parsed

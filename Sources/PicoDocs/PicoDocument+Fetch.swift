@@ -20,7 +20,8 @@ extension PicoDocument {
         let url = self.originURL
         do {
             // Fetch content of file
-            let (data, utType, urls) = try await Fetcher().fetch(url: url, recursive: recursive)
+            let fetcher = Fetcher.fetcher(url: url)
+            let (data, utType, urls) = try await fetcher.fetch (progressHandler: progressHandler)
             
             // Fetch content of children
             if let urls, recursive == true {
@@ -34,7 +35,7 @@ extension PicoDocument {
                 }
             }
             // TODO: update fetch to return multiple data?
-            await updateData( data == nil ? nil : [data!], utType: utType)
+            await updateData(data, utType: utType)
         } catch {
             print("Error fetching: \(error.localizedDescription)")
             await setError(error)
@@ -66,14 +67,9 @@ extension PicoDocument {
                 throw PicoDocsError.emptyDocument
             }
             
-            let parser = try DocumentParser.parser(for: originalContent, url: self.originURL)
-            
+            let parser = try Parser.parser(for: originalContent, url: self.originURL)
             let parsedDocument = try await parser.parseDocument(to: type)
-            Task { @MainActor in
-                // Consolidate parsed content into a single string with double newlines between worksheets
-                self.exportedContent = parsedDocument.content
-                self.status = .parsed
-            }
+            await updateParsedDocument(parsedDocument)
         } catch {
             await self.setError(error)
         }
@@ -85,25 +81,23 @@ extension PicoDocument {
     /// - Parameters:
     ///   - data: The raw data content of the document
     ///   - utType: The uniform type identifier of the document
-    private func updateData(_ data: [Data]?, utType: UTType? = nil) {
+    private func updateData(_ data: Data?, utType: UTType? = nil) {
         self.dateLastFetched = Date()
         self.originalContent = data
         
-        /*
-         why do we set original content again?
-        if let data, let content = String(data: data, encoding: .utf8) {
-            self.originalContent = data
-            self.exportedContent = [content]
-        } else {
-            self.originalContent = nil
-            self.exportedContent = nil
-        }
-         */
         self.status = .downloaded
         if let utType {
             // Some web URLs may not include a file extension. The file type can only be determined from the MIME type during the fetch phase.
             self.utType = utType
         }
+    }
+    
+    private func updateParsedDocument(_ parsedDocument: ParsedDocument) {
+        self.exportedContent = parsedDocument.content
+        self.title = parsedDocument.title
+        self.author = parsedDocument.author
+        self.cover = parsedDocument.cover
+        self.status = .parsed
     }
     
     /// Sets the document's status to failed with the given error

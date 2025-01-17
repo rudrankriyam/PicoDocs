@@ -20,6 +20,6 @@ struct PlainTextParser: DocumentParserProtocol {
 //    }
     
     func parseDocument(to format: ExportFileType? = nil) async throws -> ParsedDocument {
-        return ParsedDocument(title: nil, needsChunking: true, content: [content])        
+        return ParsedDocument(title: nil, author: nil, cover: nil, content: [content])        
     }
 }

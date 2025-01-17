@@ -27,13 +27,11 @@ open class FileFetcher: FetcherProtocol {
     public func fetch(progressHandler: ((Progress) -> Void)? = nil) async throws -> (Data?, UTType?, [URL]?) {
         
         let fileManager = FileManager.default
-    
+        
         // Check if file needs to be downloaded from the cloud first
         if try await self.url.isStoredOniCloud {
             try await downloadFromCloud(progressHandler: progressHandler)
         }
-        
-        // TODO: Special cases: directory, OR URL in Chrome and Safari
         
         if self.url.isDirectory {
             
@@ -52,16 +50,10 @@ open class FileFetcher: FetcherProtocol {
             )
             
             return (nil, nil, files)
-            
-        } else if let utType = UTType(filenameExtension: url.pathExtension), utType == .epub {
-            
-            // ePub
-            
-            return try handleEpub()
-            
+
         } else {
             
-            // Plain file
+            // url is a file
             
             let data = try Data(contentsOf: self.url)
             let utType = UTType(filenameExtension: self.url.path())
@@ -69,6 +61,43 @@ open class FileFetcher: FetcherProtocol {
         }
     }
     
+    private func downloadFromCloud(progressHandler: ((Progress) -> Void)?) async throws {
+        let fileManager = FileManager.default
+        try fileManager.startDownloadingUbiquitousItem(at: self.url)
+        
+        await withCheckedContinuation { continuation in
+            let query = NSMetadataQuery()
+            query.predicate = NSPredicate(format: "%K == %@", NSMetadataItemURLKey, url as NSURL)
+            query.searchScopes = [NSMetadataQueryUbiquitousDocumentsScope]
+            
+            NotificationCenter.default.addObserver(forName: .NSMetadataQueryDidUpdate, object: query, queue: .main) { _ in
+                query.disableUpdates()
+                //                defer { query.enableUpdates() }
+                
+                guard let item = query.results.first as? NSMetadataItem else { return }
+                
+                // Report progress
+                if let percentDownloaded = item.value(forAttribute: NSMetadataUbiquitousItemPercentDownloadedKey) as? Double {
+                    let progress = Progress(totalUnitCount: 100)
+                    progress.completedUnitCount = Int64(percentDownloaded)
+                    progressHandler?(progress)
+                    query.enableUpdates()
+                }
+                
+                // Check if download is complete
+                if item.value(forAttribute: NSMetadataUbiquitousItemDownloadingStatusKey) as? String == NSMetadataUbiquitousItemDownloadingStatusCurrent {
+                    query.stop()
+                    continuation.resume()
+                } else {
+                    query.enableUpdates()
+                }
+            }
+            
+            query.start()
+        }
+    }
+}
+    /*
     #if os(macOS)
     private func handleEpub() throws -> (Data?, UTType?, [URL]?) {
         let fileManager = FileManager.default
@@ -153,41 +182,7 @@ open class FileFetcher: FetcherProtocol {
     }
     #endif
     
-    private func downloadFromCloud(progressHandler: ((Progress) -> Void)?) async throws {
-        let fileManager = FileManager.default
-        try fileManager.startDownloadingUbiquitousItem(at: self.url)
-        
-        await withCheckedContinuation { continuation in
-            let query = NSMetadataQuery()
-            query.predicate = NSPredicate(format: "%K == %@", NSMetadataItemURLKey, url as NSURL)
-            query.searchScopes = [NSMetadataQueryUbiquitousDocumentsScope]
-            
-            NotificationCenter.default.addObserver(forName: .NSMetadataQueryDidUpdate, object: query, queue: .main) { _ in
-                query.disableUpdates()
-                //                defer { query.enableUpdates() }
-                
-                guard let item = query.results.first as? NSMetadataItem else { return }
-                
-                // Report progress
-                if let percentDownloaded = item.value(forAttribute: NSMetadataUbiquitousItemPercentDownloadedKey) as? Double {
-                    let progress = Progress(totalUnitCount: 100)
-                    progress.completedUnitCount = Int64(percentDownloaded)
-                    progressHandler?(progress)
-                    query.enableUpdates()
-                }
-                
-                // Check if download is complete
-                if item.value(forAttribute: NSMetadataUbiquitousItemDownloadingStatusKey) as? String == NSMetadataUbiquitousItemDownloadingStatusCurrent {
-                    query.stop()
-                    continuation.resume()
-                } else {
-                    query.enableUpdates()
-                }
-            }
-            
-            query.start()
-        }
-    }
+    
 }
 
 #if !os(macOS)
@@ -230,3 +225,4 @@ struct EPubContent: Codable {
     }
 }
 #endif
+*/

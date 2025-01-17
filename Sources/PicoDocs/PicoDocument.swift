@@ -53,14 +53,7 @@ public class PicoDocument {
     // MARK: - Content
     ///
     /// Original binary content of the document before processing.
-    ///
-    /// Most files will contain a single content item in this array. However, certain file formats
-    /// are stored as multiple binary chunks:
-    /// - Excel files: Each worksheet is stored separately
-    /// - EPub files: Each chapter is stored as a separate binary entry
-    ///
-    /// - Note: This property may contain multiple data objects if the source document has multiple sections
-    public var originalContent: [Data]?
+    public var originalContent: Data?
 
     /// Content converted to a format suitable for LLM processing.
     ///
@@ -74,6 +67,12 @@ public class PicoDocument {
 
     /// Title of the document
     public var title: String?
+    
+    /// Author of the document
+    public var author: String?
+    
+    /// Image of the cover of the document (for ePub and iWork documents)
+    public var cover: Data?
 
     // MARK: - File Metadata
     

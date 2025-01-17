@@ -202,6 +202,11 @@ struct ExcelParser: DocumentParserProtocol {
             }
         }
         
-        return ParsedDocument(title: title, needsChunking: false, content: workbookContents)
+        return ParsedDocument(
+            title: title,
+            author: nil,
+            cover: nil,
+            content: workbookContents
+        )
     }
 }

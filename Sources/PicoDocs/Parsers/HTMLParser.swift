@@ -50,13 +50,28 @@ struct HTMLParser: DocumentParserProtocol {
         
         switch format {
         case .plaintext:
-            return ParsedDocument(title: title, needsChunking: true, content: [attributedString.string])
+            return ParsedDocument(
+                title: title,
+                author: nil,
+                cover: nil,
+                content: [attributedString.string]
+            )
         case .html:
-            return ParsedDocument(title: title, needsChunking: true, content: [cleanHTML])
+            return ParsedDocument(
+                title: title,
+                author: nil,
+                cover: nil,
+                content: [cleanHTML]
+            )
         case .xml:
             throw PicoDocsError.unableToExportToRequestedFormat            
         case .markdown:
-            return try ParsedDocument(title: title, needsChunking: true, content: [attributedString.toMarkdown()])
+            return try ParsedDocument(
+                title: title,
+                author: nil,
+                cover: nil,
+                content: [attributedString.toMarkdown()]
+            )
         case .csv:
             throw PicoDocsError.unableToExportToRequestedFormat
         }

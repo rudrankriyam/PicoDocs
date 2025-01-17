@@ -24,7 +24,7 @@ struct ContentView: View {
                     ForEach(children, id: \.self) { child in
                         Tab("\(child.title ?? child.filename)", systemImage: "document") {
                             ScrollView {
-                                if outputFormat == nil, let data = child.originalContent?.first, let original = String(data: data, encoding: .utf8) {
+                                if outputFormat == nil, let data = child.originalContent, let original = String(data: data, encoding: .utf8) {
                                     Text(original)
                                 } else {
                                     Text(child.exportedContent?.joined(separator: "\n\n------\n\n") ?? "")
@@ -40,7 +40,7 @@ struct ContentView: View {
 
             } else {
                 ScrollView {
-                    if outputFormat == nil, let data = document?.originalContent?.first, let original = String(data: data, encoding: .utf8) {
+                    if outputFormat == nil, let data = document?.originalContent, let original = String(data: data, encoding: .utf8) {
                         Text(original)
                     } else {
                         Text(document?.exportedContent?.joined(separator: "\n\n------\n\n") ?? "")

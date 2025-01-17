@@ -8,7 +8,8 @@
 import Foundation
 
 public struct ParsedDocument: Sendable {
-    let title: String?
-    let needsChunking: Bool
-    let content: [String]
+    public let title: String?
+    public let author: String?
+    public let cover: Data?
+    public let content: [String]        
 }
