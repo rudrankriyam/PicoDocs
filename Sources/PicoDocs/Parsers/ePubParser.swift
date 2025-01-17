@@ -27,8 +27,6 @@ public struct EPUBParser: DocumentParserProtocol {
     
     public func parseDocument(to format: ExportFileType?) async throws -> ParsedDocument {
         
-        // FIXME: EPUBKit also unzips the ePub file in the document directory
-        // Line EPUBParser:44 directory = isDirectory.boolValue ? path : try unzip(archiveAt: path)
         var document: EPUBDocument?
         if let content {
             document = EPUBDocument(data: content)
