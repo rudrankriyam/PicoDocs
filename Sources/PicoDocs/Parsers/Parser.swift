@@ -27,7 +27,7 @@ struct Parser {
         
         if utType.conforms(to: .epub) {
             
-            return EPUBParser(content: content) //, url: url)
+            return EPUBParser(url: url)
             
         } else if utType.conforms(to: .xlsx) || utType.conforms(to: .spreadsheet) {
                             

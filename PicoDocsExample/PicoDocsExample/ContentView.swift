@@ -19,6 +19,7 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
+            
             if let children = document?.children {
                 TabView {
                     ForEach(children, id: \.self) { child in
@@ -38,13 +39,9 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .textSelection(.enabled)
 
-            } else {
+            } else if outputFormat == nil, let data = document?.originalContent, let original = String(data: data, encoding: .utf8) {
                 ScrollView {
-                    if outputFormat == nil, let data = document?.originalContent, let original = String(data: data, encoding: .utf8) {
-                        Text(original)
-                    } else {
-                        Text(document?.exportedContent?.joined(separator: "\n\n------\n\n") ?? "")
-                    }
+                    Text(original)
                 }
                 .textSelection(.enabled)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -52,6 +49,27 @@ struct ContentView: View {
                 if let document {
                     MetadataView(document: document)
                 }
+                
+            } else if let chapters = document?.exportedContent {
+                TabView {
+                    ForEach(chapters, id: \.self) { chapter in
+                        Tab("\(document?.title ?? "Chapter")", systemImage: "document") {
+                            ScrollView {
+                                Text(chapter)
+                            }
+                        }
+                    }
+                }
+                .id(chapters.count)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .textSelection(.enabled)
+                
+                if let document {
+                    MetadataView(document: document)
+                }
+            } else {
+                Text("")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             
             Divider()
