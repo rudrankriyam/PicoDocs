@@ -5,13 +5,16 @@ import PackageDescription
 
 let package = Package(
     name: "PicoDocs",
+    
     defaultLocalization: "en",
+    
     platforms: [
         .macOS(.v14),
         .iOS(.v17),
         .tvOS(.v17),
         .visionOS(.v2),
     ],
+    
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(

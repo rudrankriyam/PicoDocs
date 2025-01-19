@@ -17,6 +17,9 @@ struct ContentView: View {
     @State var document: PicoDocument?
     @State private var isTargeted = false
     
+    @State var selectedChapter: Int = 0
+    @State var numberOfChapters = 1
+    
     var body: some View {
         VStack {
             
@@ -51,19 +54,24 @@ struct ContentView: View {
                 }
                 
             } else if let chapters = document?.exportedContent {
-                TabView {
-                    ForEach(chapters, id: \.self) { chapter in
-                        Tab("\(document?.title ?? "Chapter")", systemImage: "document") {
-                            ScrollView {
-                                Text(chapter)
-                            }
-                        }
+                
+                Picker(selection: $selectedChapter) {
+                    ForEach(0 ..< chapters.count, id: \.self) { index in
+                        Text("Chapter \(index + 1)")
+                            .tag(index)
+                    }
+                } label: {
+                    Text("Show Chapter")
+                }
+                .padding()
+                ScrollView {
+                    if selectedChapter < chapters.count {
+                        Text(chapters[selectedChapter])
+                    } else {
+                        Text("Drop a file here")
                     }
                 }
-                .id(chapters.count)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .textSelection(.enabled)
-                
+                .frame(maxWidth: .infinity, maxHeight: .infinity)                
                 if let document {
                     MetadataView(document: document)
                 }
