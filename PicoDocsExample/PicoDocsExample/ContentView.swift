@@ -128,7 +128,7 @@ struct ContentView: View {
                     Button("OK", action: downloadFileFromWeb)
                     Button("Cancel", role: .cancel) { }
                 } message: {
-                    Text("Enter URL of any HTML, PDF, Word, Excel, or ePub file on the web")
+                    Text("Enter URL of any HTML, PDF, or Word file on the web")
                 }
             }
         }

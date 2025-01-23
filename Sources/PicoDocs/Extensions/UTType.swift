@@ -13,8 +13,6 @@ public extension UTType {
     // Custom types
     static let doc = UTType(importedAs: "com.microsoft.word.doc", conformingTo: .data)
     static let docx = UTType(importedAs: "org.openxmlformats.wordprocessingml.document", conformingTo: .xml)
-//    static let xls = UTType(importedAs: "com.microsoft.excel.xls", conformingTo: .spreadsheet)
-    static let xlsx = UTType(importedAs: "org.openxmlformats.spreadsheetml.sheet", conformingTo: .xml)
     static let xhtml = UTType(importedAs: "public.xhtml", conformingTo: .xml)
     static let webloc = UTType(importedAs: "com.apple.web-internet-location")
 
@@ -22,8 +20,7 @@ public extension UTType {
     static let supportedDocumentTypes = [
         .folder, .directory,
         .webloc,
-        .doc, .docx, .xlsx,
-        .epub,
+        .doc, .docx,
         .pdf, .rtf, .rtfd, .text, .flatRTFD, .plainText, .utf8PlainText, xml,
         .spreadsheet, .commaSeparatedText,
         .internetLocation, .internetShortcut, .url, .urlBookmarkData, .html, .xhtml,

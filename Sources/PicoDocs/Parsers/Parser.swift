@@ -25,16 +25,7 @@ struct Parser {
             }
         }
         
-        if utType.conforms(to: .epub) {
-            
-            return EPUBParser(url: url)
-            
-        } else if utType.conforms(to: .xlsx) || utType.conforms(to: .spreadsheet) {
-                            
-            return try ExcelParser(content: content)
-            
-        } else if utType.conforms(to: .pdf) {
-            
+        if utType.conforms(to: .pdf) {
             guard let pdfDocument = PDFDocument(data: content) else {
                 throw PicoDocsError.parsingError
             }
