@@ -22,8 +22,6 @@ let package = Package(
             targets: ["PicoDocs"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/CoreOffice/CoreXLSX", from: "0.14.2"),
-        .package(url: "https://github.com/ronaldmannak/EPUBKit", branch: "main"),
         .package(url: "https://github.com/scinfu/SwiftSoup", from: "2.7.6"),
     ],
     targets: [
@@ -32,8 +30,6 @@ let package = Package(
         .target(
             name: "PicoDocs",
             dependencies: [
-                .product(name: "CoreXLSX", package: "CoreXLSX"),
-                .product(name: "EPUBKit", package: "EPUBKit"),
                 .product(name: "SwiftSoup", package: "SwiftSoup"),
             ],
             resources: [

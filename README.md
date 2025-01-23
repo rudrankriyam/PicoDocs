@@ -9,7 +9,7 @@ Designed for chat clients and LLM server applications that utilize Retrieval-Aug
 ## Key Features
 
 PicoDocs supports and processes a variety of document formats:
-- **File Types**: PDF, ePub, DOCX, XLSX, HTML, Markdown, and more.
+- **File Types**: PDF, DOCX, HTML, Markdown, and more.
 - **Export Options**: Convert documents to HTML, Markdown, and JSON formats for LLM compatibility, with embedded and referenced images.
 - **Content Cleanup**: Utilizes Readability to clean HTML content, enhancing focus on the main content similar to Safari's Reader View.
 - **Multiple Sources**: Reads local files and iCloud files.
@@ -20,7 +20,6 @@ There are two main steps: fetching and parsing.
 
 ### Fetching
 - Load files from disk or download files from iCloud or the web.
-- Handle complex file structures (e.g., ePub chapters, Excel sheets) by fetching and organizing them as child documents.
 - Support loading all documents within local or iCloud directories as child documents.
 
 ### Parsing

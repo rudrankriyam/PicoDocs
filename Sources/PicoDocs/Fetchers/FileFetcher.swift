@@ -7,7 +7,6 @@
 
 import Foundation
 import UniformTypeIdentifiers
-import CoreXLSX
 
 #if os(macOS)
 import Foundation
