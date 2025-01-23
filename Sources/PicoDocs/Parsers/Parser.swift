@@ -47,32 +47,8 @@ struct Parser {
             ], documentAttributes: nil)
             return AttributedStringParser(content: attributedString)
             
-        } else if utType.conforms(to: .doc) {
-            
-#if os(iOS)
-            throw PicoDocsError.documentTypeNotSupported
-#else
-            let attributedString = try NSAttributedString(data: content, options: [
-                .documentType: NSAttributedString.DocumentType.docFormat,
-                .characterEncoding: String.Encoding.utf8.rawValue
-            ], documentAttributes: nil)
-            return AttributedStringParser(content: attributedString)
-#endif
-            
-        } else if utType.conforms(to: .docx) {
-            
-#if os(iOS)
-            throw PicoDocsError.documentTypeNotSupported
-#else
-            let attributedString = try NSAttributedString(data: content, options: [
-                .documentType: NSAttributedString.DocumentType.wordML,
-                .characterEncoding: String.Encoding.utf8.rawValue
-            ], documentAttributes: nil)
-            return AttributedStringParser(content: attributedString)
-#endif
-            
         } else if utType.conforms(to: .text) || utType.conforms(to: .flatRTFD) || utType.conforms(to: .plainText) || utType.conforms(to: .utf8PlainText) || utType.conforms(to: .xml) || utType.conforms(to: .swiftSource) || utType.conforms(to: .cSource) || utType.conforms(to: .cPlusPlusSource) || utType.conforms(to: .pythonScript) || utType.conforms(to: .javaScript) {
-            
+
             guard let text = String(data: content, encoding: .utf8) else {
                 throw PicoDocsError.documentTypeNotSupported
             }
