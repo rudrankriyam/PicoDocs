@@ -12,7 +12,6 @@ import UniformTypeIdentifiers
 import Foundation
 #else
 import Foundation
-import XMLCoder
 #endif
 
 open class FileFetcher: FetcherProtocol {
