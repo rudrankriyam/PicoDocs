@@ -9,6 +9,8 @@ import Foundation
 
 class iCloudFileMonitor {
     private let metadataQuery = NSMetadataQuery()
+    var progressHandler: ((Double) -> Void)?
+    var completion: (() -> Void)?
     
     func monitorFile(at url: URL) {
         metadataQuery.predicate = NSPredicate(format: "%K == %@",
@@ -34,6 +36,12 @@ class iCloudFileMonitor {
         let downloadProgress = item.value(forAttribute: NSMetadataUbiquitousItemPercentDownloadedKey) as? Double ?? 0.0
         let isDownloaded = item.value(forAttribute: NSMetadataUbiquitousItemDownloadingStatusKey) as? String == NSMetadataUbiquitousItemDownloadingStatusCurrent
         
-        // Use the status information here
+        // Update the download status
+        if isDownloaded {
+            progressHandler?(downloadProgress)
+            if downloadProgress >= 100.0 {
+                completion?()
+            }
+        }
     }
 }

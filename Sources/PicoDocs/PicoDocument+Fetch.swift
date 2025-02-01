@@ -27,11 +27,7 @@ extension PicoDocument {
             if let urls, recursive == true {
                 for url in urls {
                     let doc = await PicoDocument(url: url, utType: utType, parent: self)
-                    do {
-                        try await doc.fetch(recursive: recursive)
-                    } catch {
-                        await doc.setError(error)
-                    }
+                    await doc.fetch(recursive: recursive)
                 }
             }
             // TODO: update fetch to return multiple data?
@@ -54,11 +50,7 @@ extension PicoDocument {
         // just set the error and continue
         if let children = await self.children, recursive == true {
             for child in children {
-                do {
-                    try await child.parse(to: type)
-                } catch {
-                    await child.setError(error)
-                }
+                await child.parse(to: type)
             }
         }
         

@@ -24,8 +24,6 @@ open class FileFetcher: FetcherProtocol {
     
     public func fetch(progressHandler: ((Progress) -> Void)? = nil) async throws -> (Data?, UTType?, [URL]?) {
         
-        let fileManager = FileManager.default
-        
         // Check if file needs to be downloaded from the cloud first
         if try await self.url.isStoredOniCloud {
             try await downloadFromCloud(progressHandler: progressHandler)
@@ -60,15 +58,15 @@ open class FileFetcher: FetcherProtocol {
     }
     
     private func downloadFromCloud(progressHandler: ((Progress) -> Void)?) async throws {
-        let fileManager = FileManager.default
-        try fileManager.startDownloadingUbiquitousItem(at: self.url)
+        try FileManager.default.startDownloadingUbiquitousItem(at: self.url)
         
         await withCheckedContinuation { continuation in
             let query = NSMetadataQuery()
             query.predicate = NSPredicate(format: "%K == %@", NSMetadataItemURLKey, url as NSURL)
             query.searchScopes = [NSMetadataQueryUbiquitousDocumentsScope]
             
-            NotificationCenter.default.addObserver(forName: .NSMetadataQueryDidUpdate, object: query, queue: .main) { _ in
+            NotificationCenter.default.addObserver(forName: .NSMetadataQueryDidUpdate, object: query, queue: .main) { [weak query, progressHandler] _ in
+                guard let query = query else { return }
                 query.disableUpdates()
                 //                defer { query.enableUpdates() }
                 
@@ -78,7 +76,9 @@ open class FileFetcher: FetcherProtocol {
                 if let percentDownloaded = item.value(forAttribute: NSMetadataUbiquitousItemPercentDownloadedKey) as? Double {
                     let progress = Progress(totalUnitCount: 100)
                     progress.completedUnitCount = Int64(percentDownloaded)
-                    progressHandler?(progress)
+                    Task { @MainActor [progressHandler] in
+                        progressHandler?(progress)
+                    }
                     query.enableUpdates()
                 }
                 
