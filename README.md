@@ -1,5 +1,4 @@
 # PicoDocs
-[![Star History Chart](https://api.star-history.com/svg?repos=rudrankriyam/PicoDocs&type=Date)](https://star-history.com/#rudrankriyam/PicoDocs&Date)
 
 
 A Swift package for importing and converting documents for Large Language Models (LLMs).
@@ -87,3 +86,5 @@ Create a PR to include your app here.
 PicoDocs is released under the MIT license.
 
 Brought to you by Starling Protocol, Inc., creators of Pico AI Homelab, Pico AI Studio, and Flux AI Studio.
+
+[![Star History Chart](https://api.star-history.com/svg?repos=rudrankriyam/PicoDocs&type=Date)](https://star-history.com/#rudrankriyam/PicoDocs&Date)
