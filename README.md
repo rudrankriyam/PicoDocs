@@ -1,4 +1,6 @@
 # PicoDocs
+[![Star History Chart](https://api.star-history.com/svg?repos=rudrankriyam/PicoDocs&type=Date)](https://star-history.com/#rudrankriyam/PicoDocs&Date)
+
 
 A Swift package for importing and converting documents for Large Language Models (LLMs).
 
