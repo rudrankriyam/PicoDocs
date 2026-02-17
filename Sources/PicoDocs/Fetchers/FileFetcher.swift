@@ -22,7 +22,7 @@ open class FileFetcher: FetcherProtocol {
         self.url = url
     }
     
-    public func fetch(progressHandler: ((Progress) -> Void)? = nil) async throws -> (Data?, UTType?, [URL]?) {
+    public func fetch(progressHandler: (@Sendable (Progress) -> Void)? = nil) async throws -> (Data?, UTType?, [URL]?) {
         
         // Check if file needs to be downloaded from the cloud first
         if try await self.url.isStoredOniCloud {
@@ -57,7 +57,7 @@ open class FileFetcher: FetcherProtocol {
         }
     }
     
-    private func downloadFromCloud(progressHandler: ((Progress) -> Void)?) async throws {
+    private func downloadFromCloud(progressHandler: (@Sendable (Progress) -> Void)?) async throws {
         try FileManager.default.startDownloadingUbiquitousItem(at: self.url)
         
         await withCheckedContinuation { continuation in

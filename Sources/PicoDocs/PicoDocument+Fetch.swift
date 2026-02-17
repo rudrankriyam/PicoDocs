@@ -15,7 +15,7 @@ extension PicoDocument {
     ///   - recursive: If true, fetches content of child documents
     ///   - progressHandler: Optional closure to handle progress updates
     nonisolated
-    public func fetch(recursive: Bool = true, progressHandler: ((Progress) -> Void)? = nil) async {
+    public func fetch(recursive: Bool = true, progressHandler: (@Sendable (Progress) -> Void)? = nil) async {
         
         let url = self.originURL
         do {

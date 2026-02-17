@@ -14,5 +14,5 @@ public protocol FetcherProtocol {
     
     init(url: URL)
     
-    func fetch(progressHandler: ((Progress) -> Void)?) async throws -> (Data?, UTType?, [URL]?)
+    func fetch(progressHandler: (@Sendable (Progress) -> Void)?) async throws -> (Data?, UTType?, [URL]?)
 }

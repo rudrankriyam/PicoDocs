@@ -16,7 +16,7 @@ open class WebFetcher: FetcherProtocol {
         self.url = url
     }
     
-    public func fetch(progressHandler: ((Progress) -> Void)? = nil) async throws -> (Data?, UTType?, [URL]?) {
+    public func fetch(progressHandler: (@Sendable (Progress) -> Void)? = nil) async throws -> (Data?, UTType?, [URL]?) {
         
         let config = URLSessionConfiguration.default
         let urlSession = URLSession(configuration: config)
